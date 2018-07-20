@@ -128,7 +128,8 @@ class entry_iterator_t{
 			} else {
 				fprintf(stderr,"Error: no more entry to iterate !!\n");
 			}
-			return rate_t(i-1,j-1,v,w);
+            //return rate_t(i-1,j-1,v,w);
+			return rate_t(i,j,v,w); // TODO for funny format (start from 0)
 		}
 		virtual ~entry_iterator_t(){
 			if (fp) fclose(fp);
@@ -200,6 +201,7 @@ class smat_t{
 		}
 		void load_from_iterator(long _rows, long _cols, long _nnz, entry_iterator_t* entry_it) {
 			rows =_rows,cols=_cols,nnz=_nnz;
+            cout << "rows = " << rows << ", cols = " << cols << ", nnz = " << nnz << endl;
 			mem_alloc_by_me = true;
 			with_weights = entry_it->with_weights;
 			val = MALLOC(double, nnz); val_t = MALLOC(double, nnz);
@@ -227,6 +229,7 @@ class smat_t{
 			double *tmp_weight = weight;
 			for(size_t idx = 0; idx < _nnz; idx++){
 				rate_t rate = entry_it->next();
+                //cout << "rate.i = " << rate.i << ", rate.j = " << rate.j << ", rate.v = " << rate.v << endl;
 				row_ptr[rate.i+1]++;
 				col_ptr[rate.j+1]++;
 				tmp_row_idx[idx] = rate.i; 
@@ -268,6 +271,7 @@ class smat_t{
 			}
 			for(long c=cols; c>0; --c) col_ptr[c] = col_ptr[c-1];
 			col_ptr[0] = 0;
+            cout << "load done." << endl;
 		}
 		long nnz_of_row(int i) const {return (row_ptr[i+1]-row_ptr[i]);}
 		long nnz_of_col(int i) const {return (col_ptr[i+1]-col_ptr[i]);}
@@ -365,7 +369,8 @@ class testset_t{
 		FILE *fp = fopen(filename, "r");
 		for(long idx = 0; idx < nnz; ++idx){
 			fscanf(fp, "%d %d %lg", &r, &c, &v); 
-			T[idx] = rate_t(r-1,c-1,v);
+			//T[idx] = rate_t(r-1,c-1,v);
+            T[idx] = rate_t(r,c,v); // TODO for funny format (start from 0)
 		}
 		fclose(fp);
 	}

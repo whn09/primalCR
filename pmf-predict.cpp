@@ -63,7 +63,8 @@ int main(int argc, char* argv[]){
 		num_insts ++;
 		fprintf(output_fp, "%lf\n", pred_v);*/
         for(int t = 0; t < rank; t++) {
-			pred_v = W[i-1][t] * H[j-1][t];
+			//pred_v = W[i-1][t] * H[j-1][t];
+            pred_v = W[i][t] * H[j][t]; // TODO for funny format (start from 0)
             fprintf(output_fp, "%lf\t", pred_v);
         }
 		num_insts ++;

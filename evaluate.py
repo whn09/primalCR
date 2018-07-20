@@ -40,10 +40,14 @@ def evaluate(tests, predicts, dirname):
     y_score = []
     for i in range(len(tests)):
         y_test.append(tests[i][2] - 1)
-        y_score.append(predicts[i])
+        max_predict = max(predicts[i])
+        for j in range(len(predicts[i])):
+            if predicts[i][j] == max_predict:
+                y_score.append(j)
+                break
+    print('y_test:', len(y_test))
+    print('y_score:', len(y_score))
     try:
-        #print('y_test:', y_test)
-        #print('y_score:', y_score)
         graph_utils.f1score(y_test, y_score, step=0.01)
         graph_utils.roc(y_test, y_score, dirname+'preds_roc.png')
         graph_utils.ks(y_test, y_score, dirname+'preds_ks.png')
@@ -69,7 +73,7 @@ if __name__ == '__main__':
     predicts = load_predict(PREDICT_FILENAME)
     print('predicts:', len(predicts))
     if len(tests) == len(predicts):
-        #evaluate(tests, predicts, DIRNAME)
+        evaluate(tests, predicts, DIRNAME)
         evaluate_ndcg(tests, predicts, DIRNAME)
     else:
         print('ERROR!', len(tests), len(predicts))

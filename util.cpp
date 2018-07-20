@@ -7,16 +7,19 @@ void load(const char* srcdir, smat_t &R, testset_t &T, bool with_weights){
 	// add testing later
 	char filename[1024], buf[1024];
 	sprintf(filename,"%s/meta",srcdir);
+    cout << "filename1 " << filename << endl;
 	FILE *fp = fopen(filename,"r");
 	long m, n, nnz;
 	fscanf(fp, "%ld %ld", &m, &n);
 
 	fscanf(fp, "%ld %s", &nnz, buf);
 	sprintf(filename,"%s/%s", srcdir, buf);
+    cout << "filename2 " << filename << endl;
 	R.load(m, n, nnz, filename, with_weights);
 
 	if(fscanf(fp, "%ld %s", &nnz, buf)!= EOF){
 		sprintf(filename,"%s/%s", srcdir, buf);
+        cout << "filename3 " << filename << endl;
 		T.load(m, n, nnz, filename);
 	}
 	fclose(fp);
