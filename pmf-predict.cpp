@@ -50,6 +50,7 @@ int main(int argc, char* argv[]){
 	mat_t H = load_mat_t(model_fp, true);
 
 	int rank = W[0].size();
+    cout << "rank: " << rank << endl;
 
 	int i, j;
 	double v, rmse = 0;
@@ -57,10 +58,16 @@ int main(int argc, char* argv[]){
 	while(fscanf(test_fp, "%d %d %lf", &i, &j, &v) != EOF) {
 		double pred_v = 0;
 #pragma omp parallel for  reduction(+:pred_v)
-		for(int t = 0; t < rank; t++)
+		/*for(int t = 0; t < rank; t++)
 			pred_v += W[i-1][t] * H[j-1][t];
 		num_insts ++;
-		fprintf(output_fp, "%lf\n", pred_v);
+		fprintf(output_fp, "%lf\n", pred_v);*/
+        for(int t = 0; t < rank; t++) {
+			pred_v = W[i-1][t] * H[j-1][t];
+            fprintf(output_fp, "%lf\t", pred_v);
+        }
+		num_insts ++;
+		fprintf(output_fp, "\n");
 	}
 
 	return 0;

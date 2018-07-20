@@ -258,6 +258,7 @@ void run_pcrpp(parameter &param, const char* input_file_name, const char* model_
         }
     }
 
+    cout << "input_file_name is " << input_file_name << endl;
     load(input_file_name, X, T, false);
 //	U = read_initial("initial_U");
 //	V = read_initial("initial_V");
